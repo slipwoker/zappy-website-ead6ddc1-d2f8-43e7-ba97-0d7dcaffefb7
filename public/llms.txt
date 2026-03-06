@@ -1,0 +1,59 @@
+# Business — Generative Engine Optimization Map
+
+---
+
+## Pages
+
+### בית
+https://example.com
+Atitlan מביאה לך את קטלוגי ההזמנה המובילים עם אוספים ייחודיים וסיפורים מרתקים. חווית קנייה מושלמת מהבית - גלה עכשיו!
+
+### אוספים
+https://example.com/collections
+עיין באוספים המקוריים שלנו ומצא את המוצרים המושלמים עבורך. מ-Lake Atitlan ועד לעולם - אוספים שמספרים סיפור. הזמן היום!
+
+### סיפורים
+https://example.com/stories
+גלה את הסיפורים המיוחדים מאחורי כל אוסף. מטיול יומי באגם אטיטלן ועד להשראה יומיומית - סיפורים שישנו את הדרך שבה אתה קונה.
+
+### צור קשר
+https://example.com/contact
+יש לך שאלה או רעיון? אנחנו כאן בשבילך! צור קשר עם צוות Atitlan וקבל מענה מהיר ומקצועי. נשמח לשמוע ממך היום!
+
+### Products
+https://example.com/products
+המוצרים שלנו - Atitlan
+
+### Product Detail
+https://example.com/product/:slug
+פרטי המוצר - Atitlan
+
+### Category
+https://example.com/category/:slug
+מוצרים - Atitlan
+
+## Legal & Policy
+
+### Privacy Policy
+https://example.com/privacy
+Information about how user data is collected, stored, and protected.
+
+### Terms & Conditions
+https://example.com/terms
+Legal terms describing service usage, rights, and policies.
+
+### Accessibility Statement
+https://example.com/accessibility
+Information about WCAG compliance and accessibility features.
+
+---
+
+# Business Context (for LLM understanding)
+
+## About Business
+---
+
+# Additional Resources
+
+- **Sitemap**: https://example.com/sitemap.xml
+- **Robots.txt**: https://example.com/robots.txt

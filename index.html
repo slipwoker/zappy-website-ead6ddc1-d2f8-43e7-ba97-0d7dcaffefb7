@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>גלה את קטלוגי ההזמנה הטובים ביותר — Atitlan</title>
+    <meta name="description" content="Atitlan מביאה לך את קטלוגי ההזמנה המובילים עם אוספים ייחודיים וסיפורים מרתקים. חווית קנייה מושלמת מהבית - גלה עכשיו!">
+    <meta name="keywords" content="mail order catalogues, קטלוגי הזמנה, Atitlan, אוספים ייחודיים, קנייה מהבית">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Zappy Analytics -->
+<script>
+(function() {
+  'use strict';
+  
+  // Configuration
+  var config = {
+    websiteId: 'ead6ddc1-d2f8-43e7-ba97-0d7dcaffefb7',
+    apiUrl: 'https://api.zappy5.com/api/analytics/track',
+    sessionDuration: 30 * 60 * 1000, // 30 minutes
+    visitorDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
+    trackPageViews: true,
+    trackClicks: true,
+    trackFormSubmissions: true
+  };
+  
+  // Generate or retrieve persistent visitor ID (30 days)
+  function getVisitorId() {
+    var visitorKey = 'zappy_visitor_' + config.websiteId;
+    var visitor = null;
+    
+    try {
+      visitor = localStorage.getItem(visitorKey);
+      if (visitor) {
+        var visitorData = JSON.parse(visitor);
+        var now = Date.now();
+        
+        // Check if visitor ID is still valid (30 days)
+        if (now - visitorData.created < config.visitorDuration) {
+          // Update last seen timestamp
+          visitorData.lastSeen = now;
+          localStorage.setItem(visitorKey, JSON.stringify(visitorData));
+          return visitorData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: LocalStorage not available');
+    }
+    
+    // Generate new visitor ID
+    var newVisitorId = 'zv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      localStorage.setItem(visitorKey, JSON.stringify({
+        id: newVisitorId,
+        created: Date.now(),
+        lastSeen: Date.now()
+      }));
+    } catch (e) {
+      // Continue without local storage
+    }
+    
+    return newVisitorId;
+  }
+  
+  // Generate or retrieve session ID (30 minutes)
+  function getSessionId() {
+    var sessionKey = 'zappy_session_' + config.websiteId;
+    var session = null;
+    
+    try {
+      session = sessionStorage.getItem(sessionKey);
+      if (session) {
+        var sessionData = JSON.parse(session);
+        var now = Date.now();
+        
+        // Check if session is still valid
+        if (now - sessionData.timestamp < config.sessionDuration) {
+          // Update timestamp
+          sessionData.timestamp = now;
+          sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          return sessionData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: SessionStorage not available');
+    }
+    
+    // Generate new session ID
+    var newSessionId = 'zs_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      sessionStorage.setItem(sessionKey, JSON.stringify({
+        id: newSessionId,
+        timestamp: Date.now()
+      }));
+    } catch (e) {
+      // Continue without session storage
+    }
+    
+    return newSessionId;
+  }
+  
+  var visitorId = getVisitorId();
+  var sessionId = getSessionId();
+  
+  // Track an event
+  function trackEvent(eventType, data) {
+    data = data || {};
+    
+    var eventData = {
+      website_id: config.websiteId,
+      event_type: eventType,
+      page_path: window.location.pathname,
+      referrer: document.referrer || 'direct',
+      visitor_id: visitorId,
+      session_id: sessionId,
+      metadata: data
+    };
+    
+    // Use sendBeacon if available (better for page unload events)
+    if (navigator.sendBeacon) {
+      var blob = new Blob([JSON.stringify(eventData)], { type: 'application/json' });
+      navigator.sendBeacon(config.apiUrl, blob);
+    } else {
+      // Fallback to fetch
+      fetch(config.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(eventData),
+        keepalive: true
+      }).catch(function(error) {
+        console.warn('Zappy Analytics: Failed to track event', error);
+      });
+    }
+  }
+  
+  // Track page view
+  if (config.trackPageViews) {
+    trackEvent('pageview', {
+      title: document.title,
+      url: window.location.href
+    });
+  }
+  
+  // Track clicks on important elements
+  if (config.trackClicks) {
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      
+      // Track button clicks (counted as actions)
+      if (target.tagName === 'BUTTON' || target.closest('button')) {
+        var button = target.tagName === 'BUTTON' ? target : target.closest('button');
+        trackEvent('click', {
+          element: 'button',
+          text: button.textContent.trim().substring(0, 100),
+          id: button.id || null,
+          class: button.className || null
+        });
+      }
+      
+      // Track link clicks (navigation - not counted as actions)
+      else if (target.tagName === 'A' || target.closest('a')) {
+        var link = target.tagName === 'A' ? target : target.closest('a');
+        trackEvent('navigation', {
+          element: 'link',
+          text: link.textContent.trim().substring(0, 100),
+          href: link.href,
+          external: link.hostname !== window.location.hostname
+        });
+      }
+    }, true);
+  }
+  
+  // Track form submissions
+  if (config.trackFormSubmissions) {
+    document.addEventListener('submit', function(e) {
+      var form = e.target;
+      
+      trackEvent('form_submit', {
+        form_id: form.id || null,
+        form_name: form.name || null,
+        form_action: form.action || null,
+        form_method: form.method || 'GET'
+      });
+    }, true);
+  }
+  
+  // Track time on page (send on page unload)
+  var pageLoadTime = Date.now();
+  
+  window.addEventListener('beforeunload', function() {
+    var timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000); // in seconds
+    
+    trackEvent('page_unload', {
+      time_on_page: timeOnPage,
+      page_path: window.location.pathname
+    });
+  });
+  
+  // Expose tracking function globally for custom events
+  window.zappyAnalytics = {
+    track: trackEvent,
+    getVisitorId: function() { return visitorId; },
+    getSessionId: function() { return sessionId; }
+  };
+  
+})();
+</script>
+<!-- End Zappy Analytics -->
+    <meta property="og:title" content="גלה את קטלוגי ההזמנה הטובים ביותר — Atitlan">
+  <meta property="og:description" content="Atitlan מביאה לך את קטלוגי ההזמנה המובילים עם אוספים ייחודיים וסיפורים מרתקים. חווית קנייה מושלמת מהבית - גלה עכשיו!">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="he_IL">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="גלה את קטלוגי ההזמנה הטובים ביותר — Atitlan">
+  <meta name="twitter:description" content="Atitlan מביאה לך את קטלוגי ההזמנה המובילים עם אוספים ייחודיים וסיפורים מרתקים. חווית קנייה מושלמת מהבית - גלה עכשיו!">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Cookie Consent -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css">
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <!-- Mickidum Accessibility Toolbar -->
+    <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
+    <link rel="stylesheet" href="/styles.css">
+
+    <style id="zappy-dropdown-submenu-styles">
+      /* ========== DESKTOP DROPDOWN SUBMENU STYLES ========== */
+      /* Base styles for dropdown submenus - parent must be positioned */
+      .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { position: relative; }
+      /* Submenu base - hidden by default */
+      .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { display: block !important; position: absolute !important; top: 100%; left: 0; min-width: 220px; background: white; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); padding: 8px 0; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; z-index: 1000; list-style: none; pointer-events: none; }
+      /* CRITICAL: Desktop hover styles to show dropdown */
+      .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Submenu item styling */
+      .sub-menu li { list-style: none; margin: 0; padding: 0; }
+      .sub-menu a { display: block !important; padding: 10px 16px !important; color: #333 !important; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background-color 0.2s; }
+      .sub-menu a:hover { background-color: #f5f5f5; }
+      /* RTL (Hebrew/Arabic) dropdown positioning */
+      [dir="rtl"] .nav-menu .sub-menu, [dir="rtl"] nav .sub-menu, [dir="rtl"] .navbar .sub-menu, html[lang="he"] .nav-menu .sub-menu, html[lang="he"] nav .sub-menu, html[lang="he"] .navbar .sub-menu, html[lang="ar"] .nav-menu .sub-menu, html[lang="ar"] nav .sub-menu, html[lang="ar"] .navbar .sub-menu { left: auto !important; right: 0 !important; }
+      /* Hide empty dropdown menus */
+      .sub-menu:empty, .sub-menu:not(:has(li:not(.zappy-hidden-menu-item))), .sub-menu:not(:has(li)) { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+      /* Desktop: show submenu on Menu Group hover */
+      li:has(.menu-group-title):hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Menu Group title styling */
+      .nav-menu > li > .menu-group-title, #navMenu > li > .menu-group-title { display: inline-block; padding: 0.5rem 1rem; cursor: default; user-select: none; }
+      
+      /* ========== MOBILE SUBMENU STYLES ========== */
+      @media (max-width: 768px) {
+        .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { position: static !important; transform: none !important; box-shadow: none !important; background: transparent !important; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; padding: 0 !important; border-radius: 0 !important; }
+        .sub-menu.mobile-expanded { max-height: 500px !important; opacity: 1 !important; visibility: visible !important; padding: 8px 0 8px 16px !important; }
+        [dir="rtl"] .sub-menu.mobile-expanded, html[lang="he"] .sub-menu.mobile-expanded { padding: 8px 16px 8px 0 !important; }
+        /* Disable hover behavior on mobile */
+        .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 0; visibility: hidden; pointer-events: none; }
+        .nav-menu li > .sub-menu.mobile-expanded, nav li > .sub-menu.mobile-expanded, .navbar li > .sub-menu.mobile-expanded, #navMenu li > .sub-menu.mobile-expanded { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+        .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { display: flex !important; flex-wrap: wrap !important; align-items: center !important; position: relative !important; min-height: 44px !important; }
+        .nav-menu li:has(.sub-menu) > a, nav li:has(.sub-menu) > a, .navbar li:has(.sub-menu) > a, #navMenu li:has(.sub-menu) > a { flex: 1 !important; min-width: 0 !important; }
+        .nav-menu li:has(.sub-menu) > .menu-group-title, nav li:has(.sub-menu) > .menu-group-title, .navbar li:has(.sub-menu) > .menu-group-title, #navMenu li:has(.sub-menu) > .menu-group-title { flex: 1 !important; min-width: 0 !important; padding: 0 !important; line-height: inherit !important; }
+        .nav-menu li:has(.sub-menu) > .sub-menu, nav li:has(.sub-menu) > .sub-menu, .navbar li:has(.sub-menu) > .sub-menu, #navMenu li:has(.sub-menu) > .sub-menu { flex-basis: 100% !important; width: 100% !important; }
+        .nav-menu li:has(.sub-menu) > a [class*="chevron"], .nav-menu li:has(.sub-menu) > a [class*="arrow"], .nav-menu li:has(.sub-menu) > a .fa-chevron-down, .nav-menu li:has(.sub-menu) > a .fa-angle-down, nav li:has(.sub-menu) > a [class*="chevron"], nav li:has(.sub-menu) > a [class*="arrow"], #navMenu li:has(.sub-menu) > a [class*="chevron"], #navMenu li:has(.sub-menu) > a [class*="arrow"] { display: none !important; visibility: hidden !important; }
+        .mobile-submenu-toggle { display: flex !important; align-items: center !important; justify-content: center !important; width: 44px !important; height: auto !important; background: transparent !important; border: none !important; cursor: pointer !important; color: var(--text-dark) !important; position: static !important; flex-shrink: 0 !important; align-self: stretch !important; z-index: 2 !important; padding: 0 !important; margin: 0 !important; }
+        .mobile-submenu-toggle::after { content: '' !important; width: 0 !important; height: 0 !important; border-left: 6px solid transparent !important; border-right: 6px solid transparent !important; border-top: 7px solid currentColor !important; transition: transform 0.3s ease !important; }
+        .mobile-submenu-toggle.expanded::after { transform: rotate(180deg) !important; }
+        .sub-menu a { padding: 10px 0 !important; display: block !important; color: var(--text-dark) !important; }
+        .navbar .sub-menu li a, nav.navbar .sub-menu li a, .zappy-products-dropdown .sub-menu a { color: var(--text-dark) !important; }
+      }
+      @media (min-width: 769px) { .mobile-submenu-toggle { display: none !important; } }
+    </style>
+
+    <style id="zappy-widget-visibility">
+      #mic-access-tool-general-button, .mic-access-tool-general-button,
+      #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+      ._access-icon, #mic-access-tool-box, .mic-access-tool-box,
+      #mic-init-access-tool #mic-access-tool-box, div[id*="mic-access-tool-box"], ._access-menu {
+        display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important;
+      }
+    </style>
+</head>
+<body>
+
+
+    <div class="mobile-search-panel" id="mobile-search-panel">
+      <div class="search-wrapper">
+        <input type="text" id="mobile-search-input" placeholder="חיפוש מוצרים..." autocomplete="off">
+        <button class="search-submit" id="mobile-search-submit" title="חיפוש">
+          <svg width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+        </button>
+        <button class="close-search" id="close-mobile-search">
+          <svg width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div class="search-results" id="mobile-search-results"></div>
+    </div>
+  
+<script>window.ZAPPY_WEBSITE_ID = "ead6ddc1-d2f8-43e7-ba97-0d7dcaffefb7";window.ZAPPY_API_BASE = (window.location.pathname.includes('/preview') ? "https://api.zappy5.com" : "https://api.zappy5.com");</script>
+  <nav class="navbar" dir="rtl">
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+    <svg class="hamburger-icon" width="24" height="24" viewbox="0 0 24 24" fill="none">
+      <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+    <svg class="close-icon" width="24" height="24" viewbox="0 0 24 24" fill="none" style="display:none;">
+      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+  </button>
+  
+  <button class="phone-header-btn" aria-label="Call">
+    <svg width="20" height="20" viewbox="0 0 24 24" fill="currentColor">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+    </svg>
+  </button>
+  
+  <div class="nav-container">
+    <div class="nav-brand">
+      <a href="/" class="logo-link">
+        <img src="/assets/atitlan-general-logo.webp" alt="Atitlan" class="logo">
+      </a>
+    </div>
+    
+    <ul class="nav-menu" id="navMenu">
+
+    <li class="menu-item-has-children zappy-products-dropdown">
+      <a href="/products">
+        מוצרים
+        <svg class="dropdown-arrow" width="12" height="12" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 9l6 6 6-6"></path>
+        </svg>
+      </a>
+      <ul class="sub-menu" id="zappy-nav-category-links">
+        <li><a href="/products">כל המוצרים</a></li>
+        <!-- Categories will be loaded dynamically -->
+      </ul>
+    </li>
+  <li><a href="/collections">אוספים</a></li><li><a href="/stories">סיפורים</a></li><li><a href="/contact">צור קשר</a></li></ul><div class="nav-ecommerce-icons nav-icons-left"><div class="nav-search-box">
+    <input type="text" class="nav-search-input" id="nav-search-input" placeholder="חיפוש מוצרים..." autocomplete="off">
+    <button class="nav-search-btn" id="nav-search-btn" title="חיפוש">
+      <svg class="search-icon" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <div class="nav-search-results" id="nav-search-results"></div>
+  </div></div><div class="nav-ecommerce-icons nav-icons-right"><button class="nav-search-toggle" id="mobile-search-toggle" title="חיפוש"><svg width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg></button></div>
+    
+    
+  </div>
+</nav>
+
+    <nav class="zappy-catalog-menu rtl" id="zappy-catalog-menu" dir="rtl">
+      <div class="catalog-menu-container">
+        <a href="/products" class="catalog-menu-item catalog-menu-all">כל המוצרים</a>
+        <div class="catalog-menu-categories" id="zappy-category-links">
+          <!-- Categories will be loaded dynamically -->
+        </div>
+      </div>
+    </nav>
+  
+  
+  <main>
+    <section class="index-hero-section" data-layout-spec="בית-hero" data-hero-type="fullscreen-scrim">
+  <!-- Full-bleed background media -->
+  <div class="hero-bg-wrapper">
+    <img data-hero-bg="true" data-placeholder="index-hero-bg-1" data-context="Cinematic atmospheric scene for a premium editorial catalog website - soft natural light, subtle film grain, quiet and refined mood with organic textures like handcrafted paper, natural wood grain, or serene landscape. Muted earth tones (cream, warm gray, soft taupe) with a gentle focus and shallow depth of field. Evokes calmness, craftsmanship, and timeless elegance. No text, no people, just pure atmospheric beauty suitable for a high-end magazine opening spread." width="1920" height="1080" src="/assets/site-index-hero-bg-1.webp" alt="רקע אטמוספרי קולנועי" class="hero-bg-image">
+  </div>
+
+  <!-- Gradient scrim overlay for text legibility -->
+  <div class="hero-scrim" aria-hidden="true"></div>
+
+  <!-- Paper grain texture overlay -->
+  <div class="hero-grain" aria-hidden="true"></div>
+
+  <!-- Text overlay group (START-aligned, lower third) -->
+  <div class="hero-overlay-group">
+    <h1 class="hero-headline">קטלוג אטיטלן — חוויה ויזואלית ייחודית</h1>
+    <h3 class="hero-subtitle">גלו אוספים מעוצבים, סיפורים מרתקים ונושאים קוראטוריים שנבחרו במיוחד עבורכם</h3>
+    <div class="hero-cta-row">
+      <a href="/collections" class="btn-primary hero-cta">חקרו את האוסף</a>
+      <a href="/contact" class="btn-secondary hero-cta">צרו קשר</a>
+    </div>
+  </div>
+
+  <!-- Bottom divider: soft gradient fade with paper-grain dissolve -->
+  <div class="index-hero-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewbox="0 0 1200 120" preserveaspectratio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="hero-fade-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#142433;stop-opacity:1"></stop>
+          <stop offset="60%" style="stop-color:#EDE3DA;stop-opacity:0.8"></stop>
+          <stop offset="100%" style="stop-color:#F6EFE8;stop-opacity:1"></stop>
+        </linearGradient>
+        <filter id="paper-grain-dissolve">
+          <feTurbulence type="fractalNoise" basefrequency="0.9" numoctaves="3" seed="42"></feTurbulence>
+          <feColorMatrix type="saturate" values="0"></feColorMatrix>
+          <feComponentTransfer>
+            <feFuncA type="discrete" tablevalues="0 0 0 1 1"></feFuncA>
+          </feComponentTransfer>
+        </filter>
+      </defs>
+      <!-- Curved dissolve path filled from bottom -->
+      <path d="M0,120 L0,50 Q150,45 300,52 T600,48 Q750,54 900,50 T1200,52 L1200,120 Z" fill="#F6EFE8" filter="url(#paper-grain-dissolve)" opacity="0.95"></path>
+    </svg>
+  </div>
+</section>
+
+    <section class="featured-products-section" id="featured-products" data-zappy-dynamic="true">
+      <div class="container">
+        <h2 class="section-title">מוצרים מומלצים</h2>
+        <div class="product-grid featured-grid" id="zappy-featured-products">
+          <div class="loading-products">טוען מוצרים...</div>
+        </div>
+        <div class="view-all-products">
+          <a href="/products" class="btn btn-primary">צפה בכל המוצרים →</a>
+        </div>
+      </div>
+    </section>
+  
+
+    <section class="featured-categories-section" id="featured-categories" data-zappy-dynamic="true">
+      <div class="container">
+        <h2 class="section-title">קנו לפי קטגוריה</h2>
+        <div class="category-blocks" id="zappy-featured-categories">
+          <div class="loading-categories">טוען מוצרים...</div>
+        </div>
+      </div>
+    </section>
+  
+
+<section class="index-story-section" data-layout-spec="בית-story">
+  <div class="index-story-container">
+    <div class="index-story-grid">
+      <div class="index-story-content-column">
+        <h2 class="index-story-title">פילוסופיית האוסף שלנו</h2>
+        <p class="index-story-intro-paragraph"><span class="index-story-drop-cap">א</span>טיטלן מציגה חזון ייחודי של אוצרות נבחרות בקפידה, המשלבות מלאכה אותנטית עם עיצוב עכשווי. כל פריט באוסף שלנו נבחר בקפידה רבה כדי לספר סיפור משלו, להביא איכות יוצאת דופן ולהעניק השראה לחיי היומיום. אנו מאמינים שאובייקטים יפים הם לא רק דקורציה, אלא חלק בלתי נפרד מחוויית החיים המודרנית.</p>
+        <p class="index-story-body-paragraph">באתר שלנו תמצאו קטגוריות מגוונות המאורגנות בקפידה: מקטלוגים של מוצרי בית ייחודיים, דרך אוספי אופנה מעוצבים, ועד לפריטי אומנות נבחרים. כל קטגוריה מעוצבת כמגזין פרימיום, עם תמונות מרהיבות ותיאורים מפורטים שמאפשרים לכם להתחבר לכל פריט ברמה האישית.</p>
+      </div>
+      <div class="index-story-imagery-column">
+        <div class="index-story-image-wrapper">
+          <img data-placeholder="index-story-image-1" data-context="Editorial-style photograph for a curated lifestyle catalogue business: A beautifully styled flat-lay composition featuring artisan crafted objects arranged on a textured cream linen surface. Include handmade ceramic pieces, a vintage brass object, dried botanical elements, and a handwritten note. Soft natural lighting from the side creates gentle shadows. Matte photography with subtle vignette, warm tones, sophisticated and minimal aesthetic, magazine-quality composition." width="400" height="600" src="/assets/site-index-story-image-1.webp" alt="אוסף פריטים מעוצבים בקפידה">
+        </div>
+        <div class="index-story-pullquote-block">
+          <h3 class="index-story-pullquote-title">ערכות נושאיות</h3>
+          <p class="index-story-pullquote-text">כל אוסף מתוכנן כסיפור שלם עם נושא מרכזי המשלב צבעים, טקסטורות וסגנונות מתואמים.</p>
+        </div>
+      </div>
+    </div>
+    <div class="index-story-vertical-rule" aria-hidden="true"></div>
+  </div>
+  <div class="index-story-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewbox="0 0 1200 40" preserveaspectratio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,40 L0,20 L1000,20 L1010,18 L1020,22 L1030,16 L1040,24 L1050,19 L1060,21 L1070,17 L1080,23 L1090,20 L1100,20 L1200,20 L1200,40 Z" fill="#F6EFE8"></path>
+    </svg>
+  </div>
+</section>
+
+<section class="index-showcase-section" data-layout-spec="בית-showcase">
+  <div class="index-showcase-container">
+    <div class="index-showcase-intro">
+      <h2>נושאים נבחרים</h2>
+      <p>אוסף מקורות השראה ממוקד שנבחר בקפידה, מאורגן לפי נושאים ואסתטיקה ייחודית. כל פריט בקטלוג שלנו משקף תשומת לב לפרטים ומחשבה עיצובית מעמיקה.</p>
+    </div>
+
+    <div class="index-showcase-grid">
+      <!-- Dominant Feature Tile -->
+      <article class="index-showcase-tile index-showcase-tile-large">
+        <a href="/collections" class="index-showcase-tile-link">
+          <div class="index-showcase-tile-image-wrapper">
+            <img data-placeholder="index-showcase-image-1" data-context="A curated editorial photograph showcasing artisanal handcrafted home goods and textiles arranged on a rustic wooden surface with natural light, premium catalog aesthetic, magazine quality" width="700" height="800" src="/assets/site-index-showcase-image-1.webp" alt="אוסף עיצוב בית מעוצב">
+          </div>
+          <div class="index-showcase-tile-content">
+            <h3>עיצוב בית וטקסטיל</h3>
+            <p>פריטים בעבודת יד עם תשומת לב לחומרים טבעיים ועיצוב נצחי המשלב מסורת ומודרניות.</p>
+            <span class="index-showcase-ref">REF 01</span>
+          </div>
+        </a>
+      </article>
+
+      <!-- Smaller Stacked Tiles -->
+      <article class="index-showcase-tile index-showcase-tile-small">
+        <a href="/collections" class="index-showcase-tile-link">
+          <div class="index-showcase-tile-image-wrapper">
+            <img data-placeholder="index-showcase-image-2" data-context="Minimalist ceramic tableware and pottery arranged in a clean composition with soft shadows, premium product photography, editorial catalog style" width="500" height="340" src="/assets/site-index-showcase-image-2.webp" alt="קרמיקה וכלי שולחן">
+          </div>
+          <div class="index-showcase-tile-content">
+            <h3>קרמיקה וכלי שולחן</h3>
+            <p>כלים פונקציונליים שנוצרו בידי אמנים, המשלבים שימושיות עם ביטוי אמנותי ייחודי.</p>
+            <span class="index-showcase-ref">REF 02</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="index-showcase-tile index-showcase-tile-small">
+        <a href="/collections" class="index-showcase-tile-link">
+          <div class="index-showcase-tile-image-wrapper">
+            <img data-placeholder="index-showcase-image-3" data-context="Artisan jewelry and accessories displayed on natural stone and organic materials, elegant product photography with warm natural lighting, catalog quality" width="500" height="340" src="/assets/site-index-showcase-image-3.webp" alt="תכשיטים ואקססוריז">
+          </div>
+          <div class="index-showcase-tile-content">
+            <h3>תכשיטים ואקססוריז</h3>
+            <p>יצירות תכשיט בעיצוב עכשווי המשלבות טכניקות מסורתיות עם חומרים ייחודיים ונדירים.</p>
+            <span class="index-showcase-ref">REF 03</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="index-showcase-tile index-showcase-tile-small">
+        <a href="/collections" class="index-showcase-tile-link">
+          <div class="index-showcase-tile-image-wrapper">
+            <img data-placeholder="index-showcase-image-4" data-context="Natural fiber baskets and woven textiles in earthy tones, artisanal craftsmanship detail, magazine editorial photography with soft diffused light" width="500" height="340" src="/assets/site-index-showcase-image-4.webp" alt="סלסלות וטקסטיל ארוג">
+          </div>
+          <div class="index-showcase-tile-content">
+            <h3>סלסלות וטקסטיל ארוג</h3>
+            <p>מוצרי קש וסיבים טבעיים בטכניקות אריגה מסורתיות, המשקפות מלאכה עתיקת יומין.</p>
+            <span class="index-showcase-ref">REF 04</span>
+          </div>
+        </a>
+      </article>
+
+      <!-- Additional Tiles for Variety -->
+      <article class="index-showcase-tile index-showcase-tile-medium">
+        <a href="/collections" class="index-showcase-tile-link">
+          <div class="index-showcase-tile-image-wrapper">
+            <img data-placeholder="index-showcase-image-5" data-context="Vintage-inspired stationery and paper goods arranged in a flat lay composition, premium editorial photography with natural shadows" width="600" height="400" src="/assets/site-index-showcase-image-5.webp" alt="ניירות וכלי כתיבה">
+          </div>
+          <div class="index-showcase-tile-content">
+            <h3>ניירות וכלי כתיבה</h3>
+            <p>מוצרי נייר בעבודת יד ואביזרי כתיבה איכוtiים המעודדים יצירתיות ומחשבה מעמיקה.</p>
+            <span class="index-showcase-ref">REF 05</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="index-showcase-tile index-showcase-tile-medium">
+        <a href="/collections" class="index-showcase-tile-link">
+          <div class="index-showcase-tile-image-wrapper">
+            <img data-placeholder="index-showcase-image-6" data-context="Artisan candles and home fragrance products on a wooden tray with botanical elements, warm atmospheric lighting, catalog photography" width="600" height="400" src="/assets/site-index-showcase-image-6.webp" alt="נרות וריחות לבית">
+          </div>
+          <div class="index-showcase-tile-content">
+            <h3>נרות וריחות לבית</h3>
+            <p>נרות בעבודת יד ומוצרי ריח טבעיים היוצרים אווירה ייחודית ומזמינה בכל חלל.</p>
+            <span class="index-showcase-ref">REF 06</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="index-showcase-tile index-showcase-tile-medium">
+        <a href="/collections" class="index-showcase-tile-link">
+          <div class="index-showcase-tile-image-wrapper">
+            <img data-placeholder="index-showcase-image-7" data-context="Handmade wooden furniture and objects showcasing natural grain and craftsmanship, editorial product photography with dramatic side lighting" width="600" height="400" src="/assets/site-index-showcase-image-7.webp" alt="רהיטים ועצים">
+          </div>
+          <div class="index-showcase-tile-content">
+            <h3>רהיטים ועצים</h3>
+            <p>רהיטים ופריטי עץ בעבודת יד המדגישים את היופי הטבעי והמרקם הייחודי של החומר.</p>
+            <span class="index-showcase-ref">REF 07</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="index-showcase-tile index-showcase-tile-medium">
+        <a href="/collections" class="index-showcase-tile-link">
+          <div class="index-showcase-tile-image-wrapper">
+            <img data-placeholder="index-showcase-image-8" data-context="Curated collection of vintage books and printed materials with aged patina, editorial still life photography, magazine quality lighting" width="600" height="400" src="/assets/site-index-showcase-image-8.webp" alt="ספרים ודפוסים">
+          </div>
+          <div class="index-showcase-tile-content">
+            <h3>ספרים ודפוסים</h3>
+            <p>אוסף ספרים נבחרים ודפוסים אמנותיים המשלבים תוכן איכותי עם עיצוב גרפי מרשים.</p>
+            <span class="index-showcase-ref">REF 08</span>
+          </div>
+        </a>
+      </article>
+    </div>
+  </div>
+
+  <!-- Diagonal Clip-Path Divider -->
+  <div class="index-showcase-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewbox="0 0 1200 60" preserveaspectratio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,60 L0,20 L1200,40 L1200,60 Z" fill="#102A43"></path>
+    </svg>
+  </div>
+</section>
+
+<section class="index-testimonials-section" data-layout-spec="בית-testimonials">
+  <div class="index-testimonials-container">
+    <h2 class="index-testimonials-title">מה שאנשים מבחינים בו</h2>
+    
+    <div class="index-testimonials-grid">
+      <!-- Right column: 2 stacked testimonials -->
+      <div class="index-testimonials-column-right">
+        <div class="index-testimonials-card">
+          <h3 class="index-testimonials-source">שרה לוי, מעצבת פנים</h3>
+          <p class="index-testimonials-quote">"הקטלוג הזה שינה לחלוטין את הדרך שבה אני מתכננת פרויקטים. כל פריט מצולם בצורה כל כך יפה שאני יכולה להראות ללקוחות בדיוק את החזון. זה לא סתם רשימת מוצרים - זה ספר השראה אמיתי."</p>
+        </div>
+        
+        <div class="index-testimonials-card">
+          <h3 class="index-testimonials-source">דוד כהן, אדריכל נוף</h3>
+          <p class="index-testimonials-quote">"הפירוט והתשומת לב לאיכות באמת בולטים. כל דף מרגיש כמו יצירת אמנות בפני עצמה, והמידע מאורגן בצורה כל כך נגישה שאני חוזר אליו שוב ושוב."</p>
+        </div>
+      </div>
+      
+      <!-- Left column: 1 larger testimonial -->
+      <div class="index-testimonials-column-left">
+        <div class="index-testimonials-card index-testimonials-card-large">
+          <h3 class="index-testimonials-source">מיכל רוזנברג, יועצת עיצוב</h3>
+          <p class="index-testimonials-quote">"אני עובדת עם קטלוגים כבר 15 שנה, ומעולם לא נתקלתי במשהו כל כך מעוצב ומקצועי. התמונות, הטיפוגרפיה, אפילו המרווחים בין הפריטים - הכל מדוייק לפרטי פרטים. זה לא רק כלי עבודה, זה חוויה ויזואלית שמעוררת השראה בכל פעם מחדש. הלקוחות שלי תמיד מתרשמים כשאני מציגה להם דברים מהקטלוג הזה."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Bottom torn-paper divider transitioning to light section -->
+  <div class="index-testimonials-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewbox="0 0 1200 80" preserveaspectratio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,80 L0,42 Q60,38 120,44 T240,40 Q300,45 360,38 T480,42 Q540,39 600,45 T720,40 Q780,44 840,39 T960,43 Q1020,38 1080,44 T1200,40 L1200,80 Z" fill="#F6EFE8"></path>
+    </svg>
+  </div>
+</section>
+
+<section class="index-cta-section" data-layout-spec="בית-cta">
+  <div class="index-cta-container">
+    <div class="index-cta-content">
+      <h2 class="index-cta-title">בואו לגלות את האוסף שלנו</h2>
+      <p class="index-cta-description">צרו קשר ונחזור אליכם תוך 24 שעות עם כל המידע שתצטרכו. שתפו אותנו במה שמעניין אתכם ונעזור לכם למצוא בדיוק את מה שחיפשתם.</p>
+      <div class="index-cta-buttons">
+        <a href="/contact" class="btn-primary">צרו קשר</a>
+        <a href="/collections" class="btn-secondary">עיינו באוספים</a>
+      </div>
+    </div>
+    <div class="index-cta-gallery">
+      <div class="index-cta-gallery-item">
+        <img data-placeholder="index-cta-image-1" data-context="A beautifully styled product or lifestyle image showcasing quality items in a warm, inviting setting with natural lighting and elegant composition" width="300" height="400" src="/assets/site-index-cta-image-1.webp" alt="תמונת אוסף 1">
+      </div>
+      <div class="index-cta-gallery-item">
+        <img data-placeholder="index-cta-image-2" data-context="A complementary product or lifestyle image with soft focus and warm tones, creating an editorial magazine feel with attention to detail and texture" width="300" height="400" src="/assets/site-index-cta-image-2.webp" alt="תמונת אוסף 2">
+      </div>
+    </div>
+  </div>
+</section>
+  </main>
+  
+  <footer class="site-footer"><div class="footer-container"><div class="footer-top"><div class="footer-column footer-about"><img src="/assets/atitlan-general-logo.webp" alt="Atitlan" class="logo"><p class="footer-description">Atitlan - חוויה ייחודית של אמנות ותרבות</p></div><div class="footer-column footer-links"><h3 class="footer-heading">קישורים מהירים</h3><ul class="footer-nav"><li><a href="/collections">אוספים</a></li><li><a href="/stories">סיפורים</a></li><li><a href="/contact">צור קשר</a></li></ul></div><div class="footer-column footer-contact"><h3 class="footer-heading">יצירת קשר</h3><ul class="contact-list"><li><i class="fas fa-envelope"></i><a href="mailto:[business_email]">[business_email]</a></li><li><i class="fas fa-phone"></i><a href="tel:[business_phone]">[business_phone]</a></li><li><a href="/"><i class="fas fa-map-marker-alt"></i><span>[business_address]</span></a></li></ul></div><div class="footer-column footer-social"><h3 class="footer-heading">עקבו אחרינו</h3><div class="social-links"><a href="[facebook_handle]" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a><a href="[instagram_handle]" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="[whatsapp_handle]" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a></div></div></div><div class="footer-bottom"><div class="footer-bottom-content"><p class="copyright">© 2026 Atitlan. כל הזכויות שמורות.</p><div class="footer-legal"><a href="/privacy">מדיניות פרטיות</a><span class="separator">•</span><a href="/terms">תנאי שימוש</a><span class="separator">|</span>
+            <a href="/return-policy" aria-label="מדיניות החזרות">
+              מדיניות החזרות
+            </a><span class="separator">•</span><a href="/accessibility">נגישות</a><span class="separator">•</span><a href="https://zappy5.com" target="_blank" class="zappy-attribution">נוצר באמצעות Zappy</a></div></div></div></div></footer>
+  
+  <a href="https://wa.me/[whatsapp_handle]" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+  
+  <div data-integration="accessibility:toolbar"></div>
+
+    <script src="/script.js"></script>
+
+    <script id="zappy-mobile-submenu-script">
+    (function() {
+      function initMobileSubmenuToggles() {
+        if (window.innerWidth > 768) {
+          document.querySelectorAll('.mobile-submenu-toggle').forEach(function(btn) { btn.remove(); });
+          document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) { menu.classList.remove('mobile-expanded'); });
+          return;
+        }
+        var items = document.querySelectorAll('.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)');
+        items.forEach(function(li) {
+          if (li.querySelector('.mobile-submenu-toggle')) return;
+          var submenu = li.querySelector('.sub-menu');
+          var parentLink = li.querySelector(':scope > a');
+          if (!submenu || !parentLink) return;
+          var toggleBtn = document.createElement('button');
+          toggleBtn.className = 'mobile-submenu-toggle';
+          toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+          toggleBtn.setAttribute('type', 'button');
+          parentLink.insertAdjacentElement('afterend', toggleBtn);
+          toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+              if (menu !== submenu) { menu.classList.remove('mobile-expanded'); var t = menu.parentElement.querySelector('.mobile-submenu-toggle'); if(t) t.classList.remove('expanded'); }
+            });
+            submenu.classList.toggle('mobile-expanded');
+            toggleBtn.classList.toggle('expanded');
+          });
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileSubmenuToggles); }
+      else { initMobileSubmenuToggles(); }
+      var resizeTimer; window.addEventListener('resize', function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(initMobileSubmenuToggles, 250); });
+      // Re-initialize when mobile menu becomes visible (MutationObserver)
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes') {
+            var target = mutation.target;
+            if (target.classList && (target.classList.contains('active') || target.classList.contains('open'))) {
+              setTimeout(initMobileSubmenuToggles, 100);
+            }
+          }
+        });
+      });
+      setTimeout(function() {
+        document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu, nav').forEach(function(menu) {
+          observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+        });
+      }, 500);
+    })();
+    </script>
+
+    <script id="zappy-navbar-scroll-effect">
+    (function(){var nb=document.querySelector('nav.navbar,.navbar:not(.zappy-catalog-menu)');var cm=document.querySelector('.zappy-catalog-menu');if(!nb)return;var fb='rgba(16,42,67,0.85)';var th=60;nb.style.transition='background 0.3s ease,backdrop-filter 0.3s ease,-webkit-backdrop-filter 0.3s ease,box-shadow 0.3s ease';if(cm)cm.style.transition='background 0.3s ease,backdrop-filter 0.3s ease,-webkit-backdrop-filter 0.3s ease';function onS(){var y=window.scrollY||window.pageYOffset;if(y>th){nb.style.background=fb;nb.style.backdropFilter='blur(12px)';nb.style.webkitBackdropFilter='blur(12px)';nb.style.boxShadow='0 2px 16px rgba(0,0,0,0.12)';if(cm){cm.style.background=fb;cm.style.backdropFilter='blur(12px)';cm.style.webkitBackdropFilter='blur(12px)';}}else{nb.style.background='transparent';nb.style.backdropFilter='none';nb.style.webkitBackdropFilter='none';nb.style.boxShadow='none';if(cm){cm.style.background='transparent';cm.style.backdropFilter='none';cm.style.webkitBackdropFilter='none';}}}window.addEventListener('scroll',onS,{passive:true});onS();})();
+    </script>
+</body>
+</html>
